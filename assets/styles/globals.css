@@ -93,8 +93,6 @@
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
@@ -102,4 +100,10 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 500ms;
+  animation-timing-function: ease-in-out;
 }

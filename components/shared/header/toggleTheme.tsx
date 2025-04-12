@@ -1,59 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/hooks/useTheme";
 import { Sun, Moon, Monitor } from "lucide-react";
 
-type Theme = "light" | "dark" | "system";
-
-const ToggleTheme = () => {
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState<Theme>("system");
-
-  useEffect(() => {
-    const savedTheme = (localStorage.getItem("theme") as Theme) || "system";
-    setTheme(savedTheme);
-
-    applyTheme(savedTheme);
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => {
-      if (theme === "system") {
-        applyTheme("system");
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    setMounted(true);
-
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
-
-  const applyTheme = (newTheme: Theme): void => {
-    const root = document.documentElement;
-    const isDark =
-      newTheme === "dark" ||
-      (newTheme === "system" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-    if (isDark) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-
-    localStorage.setItem("theme", newTheme);
-  };
-
-  const cycleTheme = (): void => {
-    const themeOrder: Theme[] = ["light", "dark", "system"];
-    const currentIndex = themeOrder.indexOf(theme);
-    const nextIndex = (currentIndex + 1) % themeOrder.length;
-    const nextTheme = themeOrder[nextIndex];
-
-    setTheme(nextTheme);
-    applyTheme(nextTheme);
-  };
-
+export default function ToggleTheme() {
+  const { theme, setTheme } = useTheme();
   const ThemeIcon = () => {
     switch (theme) {
       case "light":
@@ -66,7 +17,6 @@ const ToggleTheme = () => {
         return <Monitor className="h-5 w-5" />;
     }
   };
-
   const getThemeLabel = (): string => {
     switch (theme) {
       case "light":
@@ -79,24 +29,21 @@ const ToggleTheme = () => {
         return "System";
     }
   };
-
-  if (!mounted) {
-    return null;
-  }
+  const toggleTheme = () => {
+    const next =
+      theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
+    setTheme(next);
+  };
 
   return (
     <Button
-      variant="ghost"
-      size="icon"
-      onClick={cycleTheme}
       title={`Theme: ${getThemeLabel()}`}
-      aria-label={`Toggle theme, current theme is ${getThemeLabel()}`}
+      variant={"ghost"}
+      onClick={toggleTheme}
       className="rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+      aria-label={`Toggle theme, current theme is ${getThemeLabel()}`}
     >
       <ThemeIcon />
-      <span className="sr-only">{getThemeLabel()}</span>
     </Button>
   );
-};
-
-export default ToggleTheme;
+}
