@@ -5,7 +5,12 @@ export interface Product {
   price: number;
   category: string;
   images: string[];
-  inStock: boolean;
   createdAt: Date;
-  updatedAt: Date;
+  slug: string;
+  brand: string;
+  rating: number;
+  stock: number;
+  numReviews: number;
+  banner: string | null;
+  isFeatured: boolean;
 }

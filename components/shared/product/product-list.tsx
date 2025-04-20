@@ -1,5 +1,5 @@
 import { Product } from "@/types/index";
-
+import ProductCard from "./product-card";
 interface Props {
   products: Product[];
   title?: string;
@@ -16,7 +16,7 @@ const ProductList = async ({ products, limit, title }: Props) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {limitData.map((product: Product) => (
-            <div key={product.id}>{product.name}</div>
+            <ProductCard key={product.slug} product={product} />
           ))}
         </div>
       )}
