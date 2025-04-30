@@ -1,4 +1,7 @@
-export interface Product {
+import { z } from "zod";
+import { insertProductSchema } from "@/lib/validators";
+
+export type Product = z.infer<typeof insertProductSchema> & {
   id: string;
   name: string;
   description: string;
@@ -13,4 +16,4 @@ export interface Product {
   numReviews: number;
   banner: string | null;
   isFeatured: boolean;
-}
+};

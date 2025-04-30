@@ -7,9 +7,19 @@ interface Props {
 }
 
 const ProductList = async ({ products, limit, title }: Props) => {
+  if (!products || !Array.isArray(products)) {
+    return (
+      <div className="my-10">
+        <h2 className="text-2xl font-bold mb-4">{title}</h2>
+        <p>No products available.</p>
+      </div>
+    );
+  }
+
   const limitData = limit ? products.slice(0, limit) : products;
+
   return (
-    <div className="my_10">
+    <div className="my-10">
       <h2 className="text-2xl font-bold mb-4">{title}</h2>
       {products.length === 0 ? (
         <p>No products found.</p>
